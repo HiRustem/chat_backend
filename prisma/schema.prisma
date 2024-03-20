@@ -15,6 +15,7 @@ model User {
     name String
     avatar String
     chats String[]
+    key Int
 }
 
 model Chat {

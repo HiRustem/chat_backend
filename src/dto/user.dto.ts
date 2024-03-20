@@ -1,19 +1,17 @@
-import { IsArray, IsString } from "class-validator"
+import { IsArray, IsInt, IsNumber, IsString } from "class-validator"
 
 export class UserDto {
-    
     @IsString()
     username: string;
 
     @IsString()
     password: string;
+}
 
+export class AllInfoUserDto {
     @IsString()
-    name: string;
+    username: string;
 
-    @IsString()
-    avatar: string;
-
-    @IsArray()
-    chats: string[];
+    @IsNumber()
+    key: string;
 }
