@@ -48,7 +48,7 @@ export class UserService {
     }
 
     async getChat(chatId: number) {
-        return await this.databaseService.chat.findUnique({
+        return await this.databaseService.chat.findUniqueOrThrow({
             where: {
                 id: chatId,
             }
@@ -77,12 +77,10 @@ export class UserService {
         .catch(() => { return null })
 
         if (firstUser && secondUser) {
-            const newMessagesArray = []
-
             const newChatObject = {
                 name: `${firstUser.name} and ${secondUser.name} chat`,
                 avatar: '',
-                messages: newMessagesArray,
+                messages: [],
                 members: [`${firstUser.id}`, `${secondUser.id}`],
             }
 
