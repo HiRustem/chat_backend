@@ -116,7 +116,7 @@ export class UserService {
     }
 
     async deleteChat(chatId: number) {
-        return await this.databaseService.chat.delete({
+        const deletedChat = await this.databaseService.chat.delete({
             where: {
                 id: chatId,
             }
@@ -124,9 +124,36 @@ export class UserService {
         .then(result => {
             return result
         })
-        .catch(error => {
-            return error
+        .catch(() => {
+            return undefined
         })
+
+        if (deletedChat) {
+            const members = deletedChat.members
+
+            for (let userId of members) {
+                const findUser = await this.databaseService.user.findUnique({
+                    where: {
+                        id: parseInt(userId)
+                    }
+                })
+                .then(result => { return result })
+
+                const newArray = findUser.chats.filter(chat => parseInt(chat) !== chatId)
+
+                await this.databaseService.user.update({
+                    where: {
+                        id: parseInt(userId),
+                    },
+
+                    data: {
+                        chats: newArray,
+                    }
+                })
+            }
+        }
+
+        return deletedChat
     }
 
     async createUser(userDto: UserDto) {
@@ -217,6 +244,30 @@ export class UserService {
 
             data: {
                 [valueName]: value,
+            }
+        })
+        .then((result) => {
+            return {
+                status: true,
+                result: result,
+            }
+        })
+        .catch((error) => {
+            return {
+                status: false,
+                result: error,
+            }
+        })
+    }
+
+    async clearAllChats(userId: number) {
+        return await this.databaseService.user.update({
+            where: {
+                id: userId,
+            },
+
+            data: {
+                chats: [],
             }
         })
         .then((result) => {

@@ -62,4 +62,9 @@ export class UserController {
     async getChat(@Param('chatId', ParseIntPipe) chatId: number) {
         return this.userService.getChat(chatId)
     }
+
+    @Get('chats/clear/:userId')
+    async clearChats(@Param('userId', ParseIntPipe) userId: number) {
+        return await this.userService.clearAllChats(userId)
+    }
 }
