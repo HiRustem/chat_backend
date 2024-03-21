@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UsePipes, ValidationPipe } from "@nestjs/common"
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UsePipes, ValidationPipe } from "@nestjs/common"
 import { UserService } from "./user.service"
-import { AllInfoUserDto, UserDto } from "../dto/user.dto"
+import { AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
 import { LoginDto } from "../dto/login.dto"
 
 @Controller('user')
@@ -15,6 +15,11 @@ export class UserController {
     @Get('chats')
     async getAllUserInfo(@Query() allInfoUser: AllInfoUserDto) {
         return await this.userService.getAllUserInfo(allInfoUser)
+    }
+
+    @Patch('chats')
+    async saveNewUserValue(@Body() saveUserValue: SaveUserValueDto) {
+        return await this.userService.saveUserValue(saveUserValue)
     }
 
     @Get('getAllCount')

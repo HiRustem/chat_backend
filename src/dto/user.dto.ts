@@ -15,3 +15,14 @@ export class AllInfoUserDto {
     @IsNumber()
     key: string;
 }
+
+export class SaveUserValueDto {
+    @IsString()
+    username: string;
+
+    @IsString()
+    valueName: string;
+
+    @IsString()
+    value: string;
+}

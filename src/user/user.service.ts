@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { DatabaseService } from "../database/database.service"
-import { AllInfoUserDto, UserDto } from "../dto/user.dto"
+import { AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
 import { LoginDto } from "../dto/login.dto"
 
 @Injectable()
@@ -100,6 +100,32 @@ export class UserService {
                     { username },
                     { password }
                 ]
+            }
+        })
+        .then((result) => {
+            return {
+                status: true,
+                result: result,
+            }
+        })
+        .catch((error) => {
+            return {
+                status: false,
+                result: error,
+            }
+        })
+    }
+
+    async saveUserValue(saveUserValue: SaveUserValueDto) {
+        const { username, valueName, value } = saveUserValue
+
+        return await this.databaseService.user.update({
+            where: {
+                username,
+            },
+
+            data: {
+                [valueName]: value,
             }
         })
         .then((result) => {
