@@ -78,7 +78,7 @@ export class UserService {
 
         if (firstUser && secondUser) {
             const newChatObject = {
-                name: `${firstUser.name}, ${secondUser.name}`,
+                name: `${firstUser.name} and ${secondUser.name} chat`,
                 avatar: '',
                 messages: [],
                 members: [`${firstUser.id}`, `${secondUser.id}`],
