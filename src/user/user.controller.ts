@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UsePipes, ValidationPipe } from "@nestjs/common"
 import { UserService } from "./user.service"
-import { AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
+import { AddNewChatDto, AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
 import { LoginDto } from "../dto/login.dto"
 
 @Controller('user')
@@ -46,5 +46,20 @@ export class UserController {
     @Get('find/:username')
     async findUser(@Param('username') username: string) {
         return await this.userService.findUserByUsername(username)
+    }
+
+    @Post('chats')
+    async createChat(@Body() addNewChatDto: AddNewChatDto) {
+        return await this.userService.createNewChat(addNewChatDto)
+    }
+
+    @Delete('chats/:chatId')
+    async deleteChat(@Param('chatId', ParseIntPipe) chatId: number) {
+        return await this.userService.deleteChat(chatId)
+    }
+
+    @Get('chats/get/:chatId')
+    async getChat(@Param('chatId', ParseIntPipe) chatId: number) {
+        return this.userService.getChat(chatId)
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { DatabaseService } from "../database/database.service"
-import { AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
+import { AddNewChatDto, AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
 import { LoginDto } from "../dto/login.dto"
 import { Prisma, PrismaClient } from "@prisma/client"
 
@@ -41,10 +41,92 @@ export class UserService {
 
     async findUserByUsername(username: string) {
         return await this.databaseService.$queryRaw(
-            Prisma.sql`SELECT username, name, avatar FROM "User" WHERE username LIKE ${'%' + username + '%'}`
+            Prisma.sql`SELECT * FROM "User" WHERE username LIKE ${'%' + username + '%'}`
         )
         .then(result => { return result })
         .catch(error => { return error })
+    }
+
+    async getChat(chatId: number) {
+        return await this.databaseService.chat.findUnique({
+            where: {
+                id: chatId,
+            }
+        })
+        .then(result => { return result })
+        .catch(() => { return {} })
+    }
+
+    async createNewChat(addNewChatDto: AddNewChatDto) {
+        const { firstUsername, secondUsername } = addNewChatDto
+
+        const firstUser = await this.databaseService.user.findUnique({
+            where: {
+                username: firstUsername,
+            }
+        })
+        .then(result => { return result })
+        .catch(() => { return null })
+
+        const secondUser = await this.databaseService.user.findUnique({
+            where: {
+                username: secondUsername,
+            }
+        })
+        .then(result => { return result })
+        .catch(() => { return null })
+
+        if (firstUser && secondUser) {
+            const newChatObject = {
+                name: `${firstUser.name}, ${secondUser.name}`,
+                avatar: '',
+                messages: [],
+                members: [`${firstUser.id}`, `${secondUser.id}`],
+            }
+
+            const newChat = await this.databaseService.chat.create({
+                data: newChatObject,
+            })
+            .then(result => {
+                return result
+            })
+
+            await this.databaseService.user.update({
+                where: {
+                    username: firstUsername,
+                },
+    
+                data: {
+                    chats: [...firstUser.chats, `${newChat.id}`],
+                }
+            })
+
+            await this.databaseService.user.update({
+                where: {
+                    username: secondUsername,
+                },
+    
+                data: {
+                    chats: [...secondUser.chats, `${newChat.id}`],
+                }
+            })
+
+            return newChat
+        }
+    }
+
+    async deleteChat(chatId: number) {
+        return await this.databaseService.chat.delete({
+            where: {
+                id: chatId,
+            }
+        })
+        .then(result => {
+            return result
+        })
+        .catch(error => {
+            return error
+        })
     }
 
     async createUser(userDto: UserDto) {

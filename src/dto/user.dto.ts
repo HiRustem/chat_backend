@@ -26,3 +26,11 @@ export class SaveUserValueDto {
     @IsString()
     value: string;
 }
+
+export class AddNewChatDto {
+    @IsString()
+    firstUsername: string;
+
+    @IsString()
+    secondUsername: string;
+}
