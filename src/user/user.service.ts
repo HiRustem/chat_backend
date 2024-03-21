@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common"
 import { DatabaseService } from "../database/database.service"
 import { AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
 import { LoginDto } from "../dto/login.dto"
+import { Prisma, PrismaClient } from "@prisma/client"
 
 @Injectable()
 export class UserService {
@@ -36,6 +37,14 @@ export class UserService {
                 result: error,
             }
         })
+    }
+
+    async findUserByUsername(username: string) {
+        return await this.databaseService.$queryRaw(
+            Prisma.sql`SELECT username, name, avatar FROM "User" WHERE username LIKE ${'%' + username + '%'}`
+        )
+        .then(result => { return result })
+        .catch(error => { return error })
     }
 
     async createUser(userDto: UserDto) {

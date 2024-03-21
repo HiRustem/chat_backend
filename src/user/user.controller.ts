@@ -42,4 +42,9 @@ export class UserController {
     async login(@Query() loginQuery: LoginDto) {
         return await this.userService.login(loginQuery)
     }
+
+    @Get('find/:username')
+    async findUser(@Param('username') username: string) {
+        return await this.userService.findUserByUsername(username)
+    }
 }
