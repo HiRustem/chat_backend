@@ -77,10 +77,12 @@ export class UserService {
         .catch(() => { return null })
 
         if (firstUser && secondUser) {
+            const newMessagesArray = []
+
             const newChatObject = {
                 name: `${firstUser.name} and ${secondUser.name} chat`,
                 avatar: '',
-                messages: [],
+                messages: newMessagesArray,
                 members: [`${firstUser.id}`, `${secondUser.id}`],
             }
 
