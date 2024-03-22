@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
 import { MessageService } from './message.service'
 import { DeleteMessageDto, MessageDto } from '../dto/message.dto'
 
@@ -9,6 +9,11 @@ export class MessageController {
   @Post('send')
   async send(@Body() messageDto: MessageDto) {
     return await this.messageService.sendMessage(messageDto)
+  }
+
+  @Get('/:chatId')
+  async getMessages(@Param('chatId', ParseIntPipe) chatId: number) {
+    return await this.messageService.getAllMessages(chatId)
   }
 
   @Delete('delete')

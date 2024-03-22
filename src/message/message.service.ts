@@ -62,4 +62,14 @@ export class MessageService {
 
     return messages
   }
+
+  async getAllMessages(chatId: number) {
+    return this.databaseService.chat.findUnique({
+      where: {
+        id: chatId,
+      }
+    })
+    .then(result => { return result.messages })
+    .catch(error => { return error })
+  }
 }
