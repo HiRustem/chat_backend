@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common"
-import { DatabaseService } from "../database/database.service"
-import { AddNewChatDto, AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
-import { LoginDto } from "../dto/login.dto"
-import { Prisma, PrismaClient } from "@prisma/client"
+import { Injectable } from '@nestjs/common'
+import { DatabaseService } from '../database/database.service'
+import { AddNewChatDto, AllInfoUserDto, SaveUserValueDto, UserDto } from '../dto/user.dto'
+import { LoginDto } from '../dto/login.dto'
+import { Prisma } from '@prisma/client'
 
 @Injectable()
 export class UserService {
