@@ -111,7 +111,10 @@ export class UserService {
                 }
             })
 
-            return newChat
+            return {
+                companion: secondUser,
+                newChat,
+            }
         }
     }
 
