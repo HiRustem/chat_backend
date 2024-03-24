@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { DatabaseService } from '../database/database.service'
-import { AddNewChatDto, AllInfoUserDto, SaveUserValueDto, UserDto } from '../dto/user.dto'
+import { AddNewChatDto, AllInfoUserDto, SaveChatValueDto, SaveUserValueDto, UserDto } from '../dto/user.dto'
 import { LoginDto } from '../dto/login.dto'
 import { Prisma } from '@prisma/client'
 
@@ -286,4 +286,30 @@ export class UserService {
             }
         })
     }
+
+    async saveChatValue(saveChatValue: SaveChatValueDto) {
+        const { chatId, valueName, value } = saveChatValue
+    
+        return await this.databaseService.chat.update({
+            where: {
+                id: parseInt(chatId),
+            },
+    
+            data: {
+                [valueName]: value,
+            }
+        })
+        .then((result) => {
+            return {
+                status: true,
+                result: result,
+            }
+        })
+        .catch((error) => {
+            return {
+                status: false,
+                result: error,
+            }
+        })
+      }
 }

@@ -15,3 +15,14 @@ export class DeleteMessageDto {
   @IsString()
   messageId: string;
 }
+
+export class EditMessageDto {
+  @IsString()
+  chatId: string;
+
+  @IsString()
+  messageId: string;
+
+  @IsString()
+  content: string;
+}

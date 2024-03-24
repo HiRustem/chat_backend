@@ -34,3 +34,14 @@ export class AddNewChatDto {
     @IsString()
     secondUsername: string;
 }
+
+export class SaveChatValueDto {
+    @IsString()
+    chatId: string;
+  
+    @IsString()
+    valueName: string;
+  
+    @IsString()
+    value: string;
+}

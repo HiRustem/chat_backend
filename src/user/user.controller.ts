@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UsePipes, ValidationPipe } from "@nestjs/common"
 import { UserService } from "./user.service"
-import { AddNewChatDto, AllInfoUserDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
+import { AddNewChatDto, AllInfoUserDto, SaveChatValueDto, SaveUserValueDto, UserDto } from "../dto/user.dto"
 import { LoginDto } from "../dto/login.dto"
 
 @Controller('user')
@@ -66,5 +66,10 @@ export class UserController {
     @Get('chats/clear/:userId')
     async clearChats(@Param('userId', ParseIntPipe) userId: number) {
         return await this.userService.clearAllChats(userId)
+    }
+
+    @Patch('chats/edit')
+    async editChat(@Body() saveChatValueDto: SaveChatValueDto) {
+        return await this.userService.saveChatValue(saveChatValueDto)
     }
 }

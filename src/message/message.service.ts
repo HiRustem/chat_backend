@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { DatabaseService } from '../database/database.service'
-import { DeleteMessageDto, MessageDto } from '../dto/message.dto'
+import { DeleteMessageDto, EditMessageDto, MessageDto } from '../dto/message.dto'
 
 @Injectable()
 export class MessageService {
@@ -32,6 +32,42 @@ export class MessageService {
     } 
 
     return messages
+  }
+
+  async editMessage(editMessageDto: EditMessageDto) {
+    const { chatId, messageId, content } = editMessageDto
+
+    const chatMessages = await this.databaseService.chat.findUnique({
+      where: {
+        id: parseInt(chatId)
+      }
+    })
+    .then(result => {
+      return result.messages
+    })
+
+    const newMessages = []
+
+    chatMessages.forEach(message => {
+      newMessages.push(JSON.parse(JSON.stringify(message)))
+    })
+
+    newMessages.map(message => {
+      if (message.id === parseInt(messageId)) {
+        message.content = content
+        return message
+      }
+    })
+
+    return await this.databaseService.chat.update({
+      where: {
+        id: parseInt(chatId)
+      },
+
+      data: {
+        messages: newMessages,
+      }
+    })
   }
 
   async deleteMessage(deleteMessageDto: DeleteMessageDto) {
